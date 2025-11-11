@@ -6,3 +6,5 @@ client.login(process.env.BOT_TOKEN!)
 client.on("clientReady", (client) => {
     console.log(`Bot ${client?.user.username} connected`)
 })
+
+export default client;
