@@ -156,7 +156,7 @@ new InteractionHandler({
 })
 
 new InteractionHandler({
-    customId: "approve-sticky",
+    customId: "approve-sticky", 
 
     run: async (client, interaction) => {
 
