@@ -11,6 +11,7 @@ interface StickyMessageData {
     color?: string;
     message?: string;
 }
+//
 
 const messagesInPreview = new Map<string, StickyMessageData>();
 const messagesCache = new Map<string, StickyMessageData>();
