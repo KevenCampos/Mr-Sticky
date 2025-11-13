@@ -11,7 +11,6 @@ interface StickyMessageData {
     color?: string;
     message?: string;
 }
-//
 
 const messagesInPreview = new Map<string, StickyMessageData>();
 const messagesCache = new Map<string, StickyMessageData>();
@@ -39,7 +38,7 @@ new SlashCommand({
         }
 
         const stickyType = interaction.options.get("type").value;
-        switch stickyType {
+        switch (stickyType) {
             case "embed": 
                 client.invokeInteraction(`create-sticky-modal-embed:show-modal`, interaction);
                 break;
