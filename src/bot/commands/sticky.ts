@@ -64,7 +64,7 @@ new InteractionHandler({
         if (action === "show-modal"){
             const modal = CreateModal({
                 title: "Create Sticky",
-                customId: `create-sticky-modal:submit-modal`,
+                customId: `setup-sticky-modal-embed:submit-modal`,
                 inputs: [
                     { customId: "title", label: "Title", required: true, value: previewData?.title || "Sticky Message" },
                     { customId: "description", label: "Description", style: TextInputStyle.Paragraph, required: true, value: previewData?.description || "This is a sticky message with embed"},
@@ -94,6 +94,13 @@ new InteractionHandler({
                     description,
                     color: color as ColorResolvable,
                 })
+
+                const components = [
+                    CreateRow([ 
+                        CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: "Approve", style: ButtonStyle.Success }),
+                        CreateButton({ customId: `setup-sticky-modal-embed:show-modal`, label: "Edit", style: ButtonStyle.Danger })
+                    ])
+                ]
     
                 let sendedMessage: Message | InteractionResponse | undefined;
                 if (previewData){
@@ -134,7 +141,7 @@ new InteractionHandler({
         if (action === "show-modal"){
             const modal = CreateModal({
                 title: "Create Sticky",
-                customId: `create-sticky-modal-message:submit-modal`,
+                customId: `setup-sticky-modal-text:submit-modal`,
                 inputs: [
                     {customId: "message", label: "Message", style: TextInputStyle.Paragraph, required: true, value: previewData?.message || "This is a sticky message with text" },
                 ],
@@ -150,7 +157,7 @@ new InteractionHandler({
                 const components = [
                     CreateRow([ 
                         CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: "Approve", style: ButtonStyle.Success }),
-                        CreateButton({ customId: `create-sticky-modal:show-modal:${type}:${interaction.channel.id}`, label: "Edit", style: ButtonStyle.Danger })
+                        CreateButton({ customId: `setup-sticky-modal-text:show-modal`, label: "Edit", style: ButtonStyle.Danger })
                     ])
                 ]
 
