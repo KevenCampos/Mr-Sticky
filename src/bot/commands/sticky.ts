@@ -40,10 +40,11 @@ new SlashCommand({
         const stickyType = interaction.options.get("type").value;
         switch (stickyType) {
             case "embed": 
-                client.invokeInteraction(`create-sticky-modal-embed:show-modal`, interaction);
+                client.invokeInteraction(`setup-sticky-modal-embed:show-modal`, interaction);
                 break;
             case "text":
-                break;
+                client.invokeInteraction(`setup-sticky-modal-text:show-modal`, interaction);
+            break;
             default:
                 return await interaction.reply({ content: `\`❌\`・sticky type not found`, ephemeral: true })
         }
@@ -121,7 +122,7 @@ new InteractionHandler({
 })
 
 new InteractionHandler({
-    customId: "setup-sticky-modal-message",
+    customId: "setup-sticky-modal-text",
 
     run: async (client, interaction, action) => {
         if (!interaction.channel?.isSendable()){
