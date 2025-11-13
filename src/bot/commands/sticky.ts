@@ -59,7 +59,7 @@ new InteractionHandler({
             return;
         }
 
-        const previewData = previewId ? messagesInPreview.get(channel.id) : undefined;
+        const previewData = messagesInPreview.get(interaction.channel.id) || undefined;
 
         if (action === "show-modal"){
             const modal = CreateModal({
@@ -129,7 +129,7 @@ new InteractionHandler({
             return;
         }
 
-        const previewData = previewId ? messagesInPreview.get(channel.id) : undefined;
+        const previewData = messagesInPreview.get(interaction.channel.id) || undefined;
 
         if (action === "show-modal"){
             const modal = CreateModal({
