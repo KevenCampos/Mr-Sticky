@@ -22,7 +22,9 @@ const updateActivity = (client: DiscordClient) => {
         `#${client?.guilds.cache.size} guilds & #${client?.users.cache.size} users`,
         `${messagesCache.size} sticky messages`,
     ]
-    client?.user?.setActivity({ name: `#${client?.guilds.cache.size} guilds | #${client?.users.cache.size} users`, type: 4 });
+
+    const selectedMessage = randomMessage[Math.floor(Math.random() * randomMessage.length)] || "Best Stickies";
+    client?.user?.setActivity({ name: selectedMessage, type: 4 });
 }
 
 export { client };
