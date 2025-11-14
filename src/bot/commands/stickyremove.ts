@@ -21,6 +21,11 @@ new SlashCommand({
             return;
         }
 
+        const hasAdminPermissions = interaction.member?.permissions.has("ADMINISTRATOR");
+        if (!hasAdminPermissions){
+            return await interaction.reply({ content: `\`❌\`・${getTranslation("error.permissions.adminRequired", interaction)}`, ephemeral: true })
+        }
+
         const channel = interaction.options.getChannel("channel") || interaction.channel;
         if (!channel){
             return await interaction.reply({ content: `\`❌\`・${getTranslation("error.channel.notFound", interaction)}`, ephemeral: true })

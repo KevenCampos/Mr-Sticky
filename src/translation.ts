@@ -21,6 +21,7 @@ const translations: Record<string, Record<string, string>> = {
         "error.validation.titleDescriptionRequired": "The title and description are required.",
         "error.validation.colorInvalid": "The color is not a valid hex color.",
         "error.validation.messageRequired": "The message is required.",
+        "error.permissions.adminRequired": "You don't have permission to use this command.",
         
         // Modal labels
         "modal.createSticky.title": "Create Sticky",
@@ -70,6 +71,7 @@ const translations: Record<string, Record<string, string>> = {
         "error.validation.titleDescriptionRequired": "O título e a descrição são obrigatórios.",
         "error.validation.colorInvalid": "A cor não é uma cor hexadecimal válida.",
         "error.validation.messageRequired": "A mensagem é obrigatória.",
+        "error.permissions.adminRequired": "Você não tem permissão para usar este comando.",
         
         // Modal labels
         "modal.createSticky.title": "Criar Mensagem Fixa",

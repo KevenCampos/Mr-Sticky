@@ -29,6 +29,11 @@ new SlashCommand({
             return;
         }
 
+        const hasAdminPermissions = interaction.member?.permissions.has("ADMINISTRATOR");
+        if (!hasAdminPermissions){
+            return await interaction.reply({ content: `\`❌\`・${getTranslation("error.permissions.adminRequired", interaction)}`, ephemeral: true })
+        }
+
         const stickyType = interaction.options.get("type").value;
         switch (stickyType) {
             case "embed": 
