@@ -3,6 +3,7 @@ import { ApplicationCommandOptionType, ButtonStyle, InteractionResponse, Message
 import { isValidHexColor } from "../../utils";
 import databases from "../../database";
 import { messagesCache, type StickyMessageData } from "../../cacheManager";
+import { getTranslation, formatTranslation } from "../../translation";
 
 const messagesInPreview = new Map<string, StickyMessageData>();
 
@@ -37,7 +38,7 @@ new SlashCommand({
                 client.invokeInteraction(`setup-sticky-modal-text:show-modal`, interaction);
             break;
             default:
-                return await interaction.reply({ content: `\`❌\`・sticky type not found`, ephemeral: true })
+                return await interaction.reply({ content: `\`❌\`・${getTranslation("error.sticky.type.notFound", interaction)}`, ephemeral: true })
         }
     }
 })
@@ -54,12 +55,12 @@ new InteractionHandler({
 
         if (action === "show-modal"){
             const modal = CreateModal({
-                title: "Create Sticky",
+                title: getTranslation("modal.createSticky.title", interaction),
                 customId: `setup-sticky-modal-embed:submit-modal`,
                 inputs: [
-                    { customId: "title", label: "Title", required: true, value: previewData?.title || "Sticky Message" },
-                    { customId: "description", label: "Description", style: TextInputStyle.Paragraph, required: true, value: previewData?.description || "This is a sticky message with embed"},
-                    { customId: "color", label: "Color", required: true, value: previewData?.color || "#89CFF0"},
+                    { customId: "title", label: getTranslation("modal.input.title", interaction), required: true, value: previewData?.title || getTranslation("default.sticky.title", interaction) },
+                    { customId: "description", label: getTranslation("modal.input.description", interaction), style: TextInputStyle.Paragraph, required: true, value: previewData?.description || getTranslation("default.sticky.description", interaction)},
+                    { customId: "color", label: getTranslation("modal.input.color", interaction), required: true, value: previewData?.color || getTranslation("default.sticky.color", interaction)},
                 ],
             })
 
@@ -73,11 +74,11 @@ new InteractionHandler({
                 const color = interaction.fields.getTextInputValue("color");
     
                 if (!title || !description){
-                    throw new Error("The title and description are required.")
+                    throw new Error(getTranslation("error.validation.titleDescriptionRequired", interaction))
                 }
     
                 if (!isValidHexColor(color)){
-                    throw new Error("The color is not a valid hex color.")
+                    throw new Error(getTranslation("error.validation.colorInvalid", interaction))
                 }
     
                 const embed = CreateEmbed({ 
@@ -88,8 +89,8 @@ new InteractionHandler({
 
                 const components = [
                     CreateRow([ 
-                        CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: "Approve", style: ButtonStyle.Success }),
-                        CreateButton({ customId: `setup-sticky-modal-embed:show-modal`, label: "Edit", style: ButtonStyle.Danger })
+                        CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: getTranslation("button.approve", interaction), style: ButtonStyle.Success }),
+                        CreateButton({ customId: `setup-sticky-modal-embed:show-modal`, label: getTranslation("button.edit", interaction), style: ButtonStyle.Danger })
                     ])
                 ]
     
@@ -101,11 +102,12 @@ new InteractionHandler({
                 }
     
                 if (!sendedMessage){
-                    throw new Error(`Failed to send the message.`)
+                    throw new Error(getTranslation("error.message.sendFailed", interaction))
                 }
     
                 messagesInPreview.set(interaction.channel.id, {
                     type: "embed",
+                    lastUpdated: new Date(),
                     title,
                     description,
                     color,
@@ -131,10 +133,10 @@ new InteractionHandler({
 
         if (action === "show-modal"){
             const modal = CreateModal({
-                title: "Create Sticky",
+                title: getTranslation("modal.createSticky.title", interaction),
                 customId: `setup-sticky-modal-text:submit-modal`,
                 inputs: [
-                    {customId: "message", label: "Message", style: TextInputStyle.Paragraph, required: true, value: previewData?.message || "This is a sticky message with text" },
+                    {customId: "message", label: getTranslation("modal.input.message", interaction), style: TextInputStyle.Paragraph, required: true, value: previewData?.message || getTranslation("default.sticky.message", interaction) },
                 ],
             })
 
@@ -147,14 +149,14 @@ new InteractionHandler({
 
                 const components = [
                     CreateRow([ 
-                        CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: "Approve", style: ButtonStyle.Success }),
-                        CreateButton({ customId: `setup-sticky-modal-text:show-modal`, label: "Edit", style: ButtonStyle.Danger })
+                        CreateButton({ customId: `approve-sticky:${interaction.channel.id}`, label: getTranslation("button.approve", interaction), style: ButtonStyle.Success }),
+                        CreateButton({ customId: `setup-sticky-modal-text:show-modal`, label: getTranslation("button.edit", interaction), style: ButtonStyle.Danger })
                     ])
                 ]
 
                 const message = interaction.fields.getTextInputValue("message");
                 if (!message){
-                    throw new Error("The message is required.")
+                    throw new Error(getTranslation("error.validation.messageRequired", interaction))
                 }
 
                 if (previewData){
@@ -164,11 +166,12 @@ new InteractionHandler({
                 }
 
                 if (!sendedMessage){
-                    throw new Error("Failed to send the message.");
+                    throw new Error(getTranslation("error.message.sendFailed", interaction));
                 }
 
                 messagesInPreview.set(interaction.channel.id, {
                     type: "text",
+                    lastUpdated: new Date(),
                     message,
                     lastMessageId: sendedMessage.id,
                     channelId: interaction.channel.id
@@ -190,12 +193,12 @@ new InteractionHandler({
         }
 
         if (!interaction.channel?.id || !interaction.channel.isSendable()){
-            return interaction.reply({ ephemeral: true, content: `\`❌\`・Channel not found.`})
+            return interaction.reply({ ephemeral: true, content: `\`❌\`・${getTranslation("error.channel.notFound", interaction)}`})
         }
 
         const stickyMessageData = messagesInPreview.get(interaction.channel.id);
         if (!stickyMessageData){
-            return interaction.reply({ ephemeral: true, content: `\`❌\`・No sticky message found in this channel.`})
+            return interaction.reply({ ephemeral: true, content: `\`❌\`・${getTranslation("error.sticky.notFound", interaction)}`})
         }
 
         let sendedMessage: Message | undefined;
@@ -212,7 +215,7 @@ new InteractionHandler({
         }
 
         if (!sendedMessage){
-            return interaction.reply({ ephemeral: true, content: `\`❌\`・Error on send message. `})
+            return interaction.reply({ ephemeral: true, content: `\`❌\`・${getTranslation("error.message.sendError", interaction)}`})
         }
 
         // Update last messageId on cache
@@ -236,6 +239,6 @@ new InteractionHandler({
         messagesInPreview.delete(interaction.channel.id);
         messagesCache.set(interaction.channel.id, stickyMessageData);
 
-        return interaction.update({ content: `\`✅\`・Sticky message sent successfully.`, components: [], embeds: []})
+        return interaction.update({ content: `\`✅\`・${getTranslation("success.sticky.sent", interaction)}`, components: [], embeds: []})
     }
 })

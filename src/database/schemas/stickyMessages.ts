@@ -7,6 +7,7 @@ export interface IStickyMessages {
     color?: string;
     message?: string;
     lastMessageId: string;
+    lastUpdated: Date;
     type: "embed" | "text";
 }
 
@@ -46,6 +47,12 @@ const stickyMessageSchema = new Schema<IStickyMessages>({
         type: String,
         required: true,
         default: null
+    },
+
+    lastUpdated: {
+        type: Date,
+        required: true,
+        default: new Date()
     },
 
     type: {
