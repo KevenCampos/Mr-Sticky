@@ -5,6 +5,8 @@ client.login(process.env.BOT_TOKEN!)
 
 client.on("clientReady", (client) => {
     console.log(`Bot ${client?.user.username} (${client?.user.id}) connected`)
+
+    client.user.setActivity({ name: "Best Stickies", type: 4 });
 })
 
 export { client };

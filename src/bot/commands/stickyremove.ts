@@ -1,7 +1,7 @@
 import { SlashCommand } from "fast-discord-js";
 import { messagesCache } from "../../cacheManager";
-import databases from "../../database";
 import { getTranslation, formatTranslation } from "../../translation";
+import databases from "../../database";
 
 new SlashCommand({
     name: "stickyremove",
