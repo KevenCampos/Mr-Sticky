@@ -1,5 +1,6 @@
 import { Client } from "fast-discord-js";
 import { Client as DiscordClient } from "discord.js";
+import { messagesCache } from "../cacheManager";
 
 const client = new Client({ autoImport: ["src/bot/commands", "src/bot/handler"]});
 client.login(process.env.BOT_TOKEN!)
@@ -15,7 +16,13 @@ client.on("clientReady", (client) => {
 
 
 const updateActivity = (client: DiscordClient) => {
-    client?.user?.setActivity({ name: `Best Stickies #${client?.guilds.cache.size} guilds`, type: 4 });
+
+    const randomMessage = [
+        "📌 Best Stickies 📌",
+        `#${client?.guilds.cache.size} guilds & #${client?.users.cache.size} users`,
+        `${messagesCache.size} sticky messages`,
+    ]
+    client?.user?.setActivity({ name: `#${client?.guilds.cache.size} guilds | #${client?.users.cache.size} users`, type: 4 });
 }
 
 export { client };
